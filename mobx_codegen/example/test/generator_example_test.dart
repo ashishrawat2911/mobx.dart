@@ -3,8 +3,10 @@ import '../lib/src/generator_example.dart';
 import 'package:test/test.dart';
 
 void main() {
-  setUp(() => mainContext.config =
-      ReactiveConfig(enforceActions: EnforceActions.never));
+  setUp(() {
+    mainContext.config = ReactiveConfig(enforceActions: EnforceActions.never);
+    fullNameCalculations = 0;
+  });
 
   tearDown(() => mainContext.config = ReactiveConfig.main);
 
@@ -41,6 +43,13 @@ void main() {
 
         user.lastName = 'Addams';
         expect(fullName, equals('John Addams'));
+      });
+      test('@computed should not recalculate unnecessarily', () {
+        final user = createStore();
+        expect(user.fullName, equals('Jane Doe'));
+        expect(fullNameCalculations, 1);
+        expect(user.fullName, equals('Jane Doe'));
+        expect(fullNameCalculations, 1);
       });
 
       test('@action works', () {

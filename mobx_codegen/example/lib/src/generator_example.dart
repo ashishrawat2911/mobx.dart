@@ -2,6 +2,8 @@ import 'package:mobx/mobx.dart';
 
 part 'generator_example.g.dart';
 
+int fullNameCalculations = 0;
+
 class User = _User with _$User;
 
 abstract class _User implements Store {
@@ -16,7 +18,10 @@ abstract class _User implements Store {
   String lastName = 'Doe';
 
   @computed
-  String get fullName => '$firstName $lastName';
+  String get fullName {
+    fullNameCalculations++;
+    return '$firstName $lastName';
+  }
 
   @action
   void updateNames({String firstName, String lastName}) {
